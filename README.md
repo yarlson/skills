@@ -14,6 +14,7 @@ npx skills add https://github.com/yarlson/skills/tree/main/code-review
 npx skills add https://github.com/yarlson/skills/tree/main/infra-code-review
 npx skills add https://github.com/yarlson/skills/tree/main/readme-gen
 npx skills add https://github.com/yarlson/skills/tree/main/prd-vertical-slicer
+npx skills add https://github.com/yarlson/skills/tree/main/saas-site-design
 npx skills add https://github.com/yarlson/skills/tree/main/tui-design
 ```
 
@@ -26,6 +27,7 @@ npx skills add https://github.com/yarlson/skills/tree/main/tui-design
 | [`infra-code-review`](infra-code-review/)     | IaC review — network exposure, IAM, destructive changes, cost — before plan/apply/deploy              |
 | [`prd-vertical-slicer`](prd-vertical-slicer/) | Convert PRDs into adaptive vertical slice plans with architecture guardrails and tech-debt prevention |
 | [`readme-gen`](readme-gen/)                   | Generate a README from code — explores the repo, detects project type, writes benefit-first docs      |
+| [`saas-site-design`](saas-site-design/)       | Design spec for SaaS marketing sites — layout, typography, color, components, interactions            |
 | [`tui-design`](tui-design/)                   | Design terminal UIs with layout discipline, color restraint, and keyboard-first interaction           |
 
 ## How skills work

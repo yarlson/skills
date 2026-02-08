@@ -1,5 +1,5 @@
 ---
-name: prd-adaptive-vertical-slicer
+name: prd-vertical-slicer
 description: Convert PRDs (including phase-based PRDs) into adaptive vertical slice plans with architecture guardrails and tech-debt prevention.
 context: fork
 ---
