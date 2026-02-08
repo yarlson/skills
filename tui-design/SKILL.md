@@ -1,7 +1,6 @@
 ---
 name: tui-design
 description: Build clean, distinctive, production-ready Terminal UIs (TUIs) under terminal limits (monospace grid, fixed line height, limited styles). Use for screens, components, flows, and full TUI apps.
-license: Complete terms in LICENSE.txt
 ---
 
 ---

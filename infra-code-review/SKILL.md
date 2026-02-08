@@ -1,7 +1,7 @@
 ---
 name: infra-code-review
 description: This skill should be used when the user asks to "review my infra changes", "review my IaC", "check my infrastructure code", "review this deploy config", "review my cloud config", "review infra before I push", or mentions reviewing, auditing, or analyzing infrastructure-as-code changes — any tool, any cloud, any format.
-version: 1.0.0
+context: fork
 ---
 
 # Reviewing Infrastructure-as-Code Changes
