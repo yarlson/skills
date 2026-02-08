@@ -1,7 +1,7 @@
 ---
 name: readme-gen
 description: This skill should be used when the user asks to "generate a readme", "write a readme", "create a README.md", "update the readme", "make a readme for this project", "readme for this repo", or mentions generating, writing, or improving a README file for a project or repository.
-version: 1.0.0
+context: fork
 ---
 
 # Generating a README
