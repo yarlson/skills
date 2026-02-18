@@ -55,42 +55,6 @@ Write durable rules and current behavior only.
 - `memory-map.md` (index of files)
 - domain folders as needed: `.memory/<domain>/*.md`
 
-## Tools
-
-### Data tools (read-only)
-
-- `fs_stat(path) -> { exists: bool, is_dir: bool }`
-- `fs_list(path) -> { entries: [{ name: string, type: "file"|"dir" }] }`
-- `fs_read(path) -> { content: string }`
-- `text_search(query, paths, max_results?) -> { matches: [{ path, line, snippet }] }`
-- `run_command(cmd) -> { stdout, stderr, exit_code }` (allowlisted; see permissions)
-
-### Action tools (mutating)
-
-- `fs_mkdir(path, recursive=true) -> { ok: bool }`
-- `fs_write(path, content, overwrite=true, create_dirs=true) -> { ok: bool }`
-- `fs_move(src, dst, overwrite=false, create_dirs=true) -> { ok: bool }`
-- `fs_delete(path) -> { ok: bool }`
-
-### Optional deterministic helpers (if available)
-
-- `run_script(name, args) -> { stdout, stderr, exit_code }`
-  - Intended for `scripts/vault_lint.py` and `scripts/vault_compact.py`
-
-## Permissions / Allowlist
-
-You may only use `run_command` for:
-
-- `git status --porcelain`
-- `git diff --name-only`
-- `git diff`
-- `wc -l <path>` (or equivalent line count)
-- `find .memory -type f` (or equivalent)
-- `python scripts/vault_lint.py ...` (if executed via run_command)
-- `python scripts/vault_compact.py ...`
-
-Never run network commands. Never modify outside `.memory/` unless the user explicitly asks.
-
 ## Decision Policy (How to Choose the Mode)
 
 ### Mode selection
@@ -115,13 +79,13 @@ Goal: create a valid `.memory/` skeleton with templates that describe current st
 
 Steps:
 
-1. `fs_stat(".memory")` verify absent or not a dir
+1. Verify that `.memory/` is absent or not an existing directory
 2. Create directories and core files
 3. Write templates:
    - `summary.md` with required sections (no status/progress)
    - `terminology.md`, `practices.md`
    - `memory-map.md` indexing everything
-4. Verify by reading back and linting (no prohibited patterns)
+4. Verify by reading back files and running `scripts/vault_lint.py` (no prohibited patterns)
 
 ### 2) READ
 
@@ -152,7 +116,7 @@ Steps:
 4. Update `practices.md` for new invariants/conventions
 5. Update `summary.md` only if the "What/Architecture/Core Flow/System State/Capabilities/Tech Stack" materially changed
 6. Update `memory-map.md` to reflect current file set
-7. Verify and lint (no prohibited content)
+7. Verify by reading back files and running `scripts/vault_lint.py`
 
 ### 4) REORGANIZE (after massive change)
 
@@ -164,7 +128,7 @@ Steps:
 2. Merge duplicates; split multi-topic files
 3. Rename/move files so domains match the code's reality (auth/, api/, infra/, ui/, etc.)
 4. Ensure memory-map is the single source index
-5. Verify links and lint
+5. Verify links and run `scripts/vault_lint.py`
 
 ### 5) COMPACT (outgrowing limits)
 
@@ -172,13 +136,20 @@ Goal: reduce size while preserving information and correctness.
 
 Steps:
 
-1. Detect oversize files (> ~250 lines) and high redundancy
+1. Run `scripts/vault_compact.py` to detect oversize files (> ~250 lines) and scan for high redundancy
 2. Split by topic; extract repeated rules into `practices.md` and repeated terms into `terminology.md`
 3. Prefer:
    - concise bullets for invariants
    - small examples
    - link-out to domain files
-4. Verify that no meaning was lost (read back the result) and lint
+4. Verify that no meaning was lost (read back the result) and run `scripts/vault_lint.py`
+
+## Helper Scripts
+
+This skill ships with optional Python scripts in `scripts/`. Use them when available; fall back to manual heuristics otherwise.
+
+- **`scripts/vault_lint.py`** — Check `.memory/` files for prohibited content (dates, commit hashes, status words, narrative tone, emojis). Exit 0 = clean, exit 1 = violations found.
+- **`scripts/vault_compact.py [line_limit]`** — Report `.memory/` files exceeding the line limit. Default limit is 250 lines.
 
 ## Guardrails (Injection Resistance)
 
@@ -191,9 +162,8 @@ Steps:
 After any mutating mode (INIT/UPDATE/REORGANIZE/COMPACT):
 
 1. Read back the edited files
-2. Run lint checks (script if available; otherwise manual heuristics)
+2. Run `scripts/vault_lint.py` to check for prohibited patterns (fall back to manual heuristics if script is unavailable)
 3. Ensure memory-map indexes all `.memory/**.md` files
-4. Ensure prohibited patterns are absent
 
 ## Output Contract (Final Response)
 
